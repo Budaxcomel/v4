@@ -9,7 +9,7 @@ echo "Progress..."
 sleep 3
 #install bot TELEGRAM
 cd /usr/bin 
-wget -O bot "https://raw.githubusercontent.com/Budaxcomel/v4/main/bot.sh" && chmod +x /usr/bin/bot
+wget -O bot "https://raw.githubusercontent.com/Budaxcomel/botSC/main/bot.sh" && chmod +x /usr/bin/bot
 
 cd
 
