@@ -17,7 +17,7 @@ wget -q -O /usr/bin/menu-backup "https://raw.githubusercontent.com/Budaxcomel/v4
 wget -q -O /usr/bin/backup "https://raw.githubusercontent.com/Budaxcomel/v4/main/backup/backup.sh" && chmod +x /usr/bin/backup
 wget -q -O /usr/bin/restore "https://raw.githubusercontent.com/Budaxcomel/v4/main/backup/restore.sh" && chmod +x /usr/bin/restore
 cd /usr/bin
-wget -O bot "https://raw.githubusercontent.com/Budaxcomel/v4/main/bot.sh" chmod +x /usr/bin/bot
+wget -O bot "https://raw.githubusercontent.com/Budaxcomel/botSC/main/bot.sh" chmod +x /usr/bin/bot
 echo -e " [INFO] Update Successfully"
 sleep 2
 exit
