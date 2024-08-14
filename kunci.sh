@@ -10,11 +10,11 @@ rm -rf user-unlock
 # download script
 cd /usr/bin
 # menu
-wget -O user-lock "https://raw.githubusercontent.com/Andyyuda/v4/main/ssh/user-lock.sh"
-wget -O user-unlock "https://raw.githubusercontent.com/Andyyuda/v4/main/ssh/user-unlock.sh"
+wget -O user-lock "https://raw.githubusercontent.com/Budaxcomel/v4/main/ssh/user-lock.sh"
+wget -O user-unlock "https://raw.githubusercontent.com/Budaxcomel/v4/main/ssh/user-unlock.sh"
 # chomad
-wget -q -O /usr/bin/user-lock "https://raw.githubusercontent.com/Andyyuda/v4/main/ssh/user-lock.sh" && chmod +x /usr/bin/user-lock
-wget -q -O /usr/bin/user-unlock "https://raw.githubusercontent.com/Andyyuda/v4/main/ssh/user-unlock.sh" && chmod +x /usr/bin/user-unlock
+wget -q -O /usr/bin/user-lock "https://raw.githubusercontent.com/Budaxcomel/v4/main/ssh/user-lock.sh" && chmod +x /usr/bin/user-lock
+wget -q -O /usr/bin/user-unlock "https://raw.githubusercontent.com/Budaxcomel/v4/main/ssh/user-unlock.sh" && chmod +x /usr/bin/user-unlock
 echo -e " [INFO] Update Successfully"
 sleep 2
 exit
