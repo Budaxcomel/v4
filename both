@@ -1,4 +1,4 @@
-#!/bin/bash
+    #!/bin/bash
 clear
 #By = t.me/ownerimmanvpn
 red() { echo -e "\\033[32;1m${*}\\033[0m"; }
@@ -43,8 +43,8 @@ apt update -y && apt upgrade -y
 apt install python3 python3-pip git speedtest-cli -y
 cd /usr/bin
 clear
-wget https://raw.githubusercontent.com/Budaxcomel/main/botmin.zip &> /dev/null
-unzip adminbot.zip &> /dev/null
+wget https://raw.githubusercontent.com/Budaxcomel/botSC/main/botmin.zip &> /dev/null
+unzip botmin.zip &> /dev/null
 pip3 install -r adminbot/requirements.txt
 chmod +x *
 mv -f * /usr/bin
@@ -54,15 +54,15 @@ clear
 echo -e "\033[1;36m┌━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┐\033[0m"
 echo -e "   \e[1;97;101m      Masukan Id Tele & TokenBot       \e[0m"
 echo -e "\033[1;36m└━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┘\033[0m"
-echo -e "${grenbo}Tutorial Creat Bot and ID Telegram${NC}"
-echo -e "${grenbo}[*] Creat Bot and Token Bot : @BotFather${NC}"
+echo -e "${grenbo}Tutorial Create Bot Telegram${NC}"
+echo -e "${grenbo}[*] Create Bot and Get Token Bot : @BotFather${NC}"
 echo -e "${grenbo}[*] Info Id Telegram : @MissRose_bot , perintah /info${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 read -rp "[*] Input your Bot Token : " -e bottoken 
 read -rp "[*] Input Your Id Telegram : " -e admin
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 clear
-rm -rf /usr/bin/ddsdswl.session
+rm -rf /usr/bin/immanvpn.session
 rm -rf /usr/bin/adminbot/var.txt
 rm -rf /usr/bin/adminbot/database.db
 if [[ ${c} != "0" ]]; then
