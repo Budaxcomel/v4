@@ -108,7 +108,7 @@ wget -O /usr/bin/restore "https://raw.githubusercontent.com/Budaxcomel/v4/main/b
 wget -O /usr/bin/up "https://raw.githubusercontent.com/Budaxcomel/v4/main/up.sh" && chmod +x /usr/bin/up
 wget -O jam "https://raw.githubusercontent.com/Budaxcomel/v4/main/jam.sh"
 wget https://raw.githubusercontent.com/Budaxcomel/v4/main/udp/udp.sh && bash udp.sh
-wget https://raw.githubusercontent.com/Budaxcomel/v4/main/SLDNS/install-sldns && chmod +x install-sldns && ./install-sldns
+wget https://raw.githubusercontent.com/Andyvpn/Autoscript-by-azi/main/autoscript-ssh-slowdns-main/slowdns.sh && chmod +x slowdns.sh && ./slowdns.sh
 
 #install Bot panel
 wget -q -O /usr/bin/installbot "https://raw.githubusercontent.com/IMMANVPN/vpn/main/bot_panel/installer.sh" && chmod +x /usr/bin/installbot
@@ -158,7 +158,6 @@ chmod +x menu-bckp
 chmod +x backup
 chmod +x restore
 chmod +x jam
-chmod +x install-sldns
 chmod +x installbot
 chmod +x bbt
 echo -e " [INFO] Update Successfully"
