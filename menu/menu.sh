@@ -38,7 +38,7 @@ let ssa=$ssx/2
 if [[ -e /usr/bin/bot ]]; then
 echo -ne
 else
-wget -O /usr/bin/bot https://raw.githubusercontent.com/Budaxcomel/v4/main/bot.sh && chmod +x /usr/bin/bot
+wget -O /usr/bin/bot https://raw.githubusercontent.com/Budaxcomel/botSC/main/bot.sh && chmod +x /usr/bin/bot
 fi
 UDPX="https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1S3IE25v_fyUfCLslnujFBSBMNunDHDk2' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1S3IE25v_fyUfCLslnujFBSBMNunDHDk2"
 # // Exporting Language to UTF-8
