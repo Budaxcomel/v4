@@ -151,8 +151,8 @@ echo -e "$green          Install XRAY              $NC"
 echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 sleep 1
 clear
-wget https://raw.githubusercontent.com/artanodrop/v4/main/xray/ins-xray.sh && chmod +x ins-xray.sh && ./ins-xray.sh
-wget https://raw.githubusercontent.com/Budaxcomel/v4/main/Sshws/insshws.sh && chmod +x insshws.sh && ./insshws.sh
+wget https://raw.githubusercontent.com/Budaxcomel/v4/main/xray/ins-xray.sh && chmod +x ins-xray.sh && ./ins-xray.sh
+wget https://raw.githubusercontent.com/Budaxcomel/v4/main/sshws/insshws.sh && chmod +x insshws.sh && ./insshws.sh
 clear
 #pasang rc clone ssh ovpn 
 echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m" 
@@ -168,7 +168,7 @@ echo -e "$green          Install SLDNS              $NC"
 echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 sleep 2
 clear
-wget https://raw.githubusercontent.com/Andyvpn/Autoscript-by-azi/main/autoscript-ssh-slowdns-main/slowdns.sh && chmod +x slowdns.sh && ./slowdns.sh
+wget https://raw.githubusercontent.com/Budaxcomel/v4/main/SLDNS/install-sldns && chmod +x install-sldns && ./install-sldns
 clear
 
 #Instal udp
@@ -236,7 +236,7 @@ echo "   - Vless None TLS	: 80" | tee -a log-install.txt
 echo "   - Trojan GRPC		: 443" | tee -a log-install.txt
 echo "   - Trojan WS		: 443" | tee -a log-install.txt
 echo "   - Trojan Go		: 443" | tee -a log-install.txt
-echo "   - slowdns              : 443,80,8080,53,5300" | tee -a log-install.txt
+echo "   - Slowdns              : 443,80,8080,53,5300" | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "   >>> Server Information & Other Features"  | tee -a log-install.txt
 echo "   - Timezone		: Asia/Kuala_Lumpur (GMT +8)"  | tee -a log-install.txt
