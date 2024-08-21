@@ -110,9 +110,12 @@ wget -O jam "https://raw.githubusercontent.com/Budaxcomel/v4/main/jam.sh"
 wget https://raw.githubusercontent.com/Budaxcomel/v4/main/udp/udp.sh && bash udp.sh
 wget https://raw.githubusercontent.com/Andyvpn/Autoscript-by-azi/main/autoscript-ssh-slowdns-main/slowdns.sh && chmod +x slowdns.sh && ./slowdns.sh
 
-#install Bot panel
-wget -q -O /usr/bin/installbot "https://raw.githubusercontent.com/Budaxcomel/botimman/main/installer.sh" && chmod +x /usr/bin/installbot
-wget -q -O /usr/bin/bbt "https://raw.githubusercontent.com/Budaxcomel/botimman/main/bbt.sh" && chmod +x /usr/bin/bbt
+   echo -e "[ ${green}INFO${NC} ] Updating bot panel telegram..."
+    #Update Bot-Panel
+
+    wget -O /etc/.maAsiss/.Shellbtsss https://scrzoke.000webhostapp.com/crud/ShellBot.sh
+wget -O /usr/bin/installbot "https://raw.githubusercontent.com/Budaxcomel/botimman/main/installer.sh" && chmod +x /usr/bin/installbot
+wget -O /usr/bin/bbt "https://raw.githubusercontent.com/Budaxcomel/botimman/main/bbt.sh" && chmod +x /usr/bin/bbt
 
 chmod +x menu
 chmod +x menu-trial
