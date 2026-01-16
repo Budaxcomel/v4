@@ -6,11 +6,11 @@
 export DEBIAN_FRONTEND=noninteractive
 MYIP=$(wget -qO- ipinfo.io/ip);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
-NET=$(ip -o $ANU -4 route show to default | awk '{print $5}');
+NET=$(ip -o -4 route show to default | awk '{print $5}' | head -n1);
 source /etc/os-release
 ver=$VERSION_ID
 
-#detail nama perusahaan
+# Maklumat (dummy) untuk sijil
 country=ID
 state=Malaysia
 locality=none
@@ -19,7 +19,7 @@ organizationalunit=none
 commonname=none
 email=immanvpnstore@gmail.com
 
-# simple password minimal
+# Kata laluan minimum (PAM)
 curl -sS https://raw.githubusercontent.com/Budaxcomel/v4/main/ssh/password | openssl aes-256-cbc -d -a -pass pass:scvps07gg -pbkdf2 > /etc/pam.d/common-password
 chmod +x /etc/pam.d/common-password
 
@@ -50,42 +50,42 @@ cat > /etc/rc.local <<-END
 exit 0
 END
 
-# Ubah izin akses
+# Ubah kebenaran akses
 chmod +x /etc/rc.local
 
-# enable rc local
+# Aktifkan rc.local
 systemctl enable rc-local
 systemctl start rc-local.service
 
-# disable ipv6
+# Matikan IPv6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
 
-#update
+# Kemas kini sistem
 apt update -y
 apt upgrade -y
 apt dist-upgrade -y
 apt-get remove --purge ufw firewalld -y
 apt-get remove --purge exim4 -y
 
-#install jq
+# Pasang jq
 apt -y install jq
 
-#install shc
+# Pasang shc
 apt -y install shc
 
-# install wget and curl
+# Pasang wget dan curl
 apt -y install wget curl
 
-#figlet
+# Figlet/Lolcat
 apt-get install figlet -y
 apt-get install ruby -y
 gem install lolcat
 
-# set time GMT +7
+# Tetapan zon masa (Asia/Kuala_Lumpur)
 ln -fs /usr/share/zoneinfo/Asia/Kuala_Lumpur /etc/localtime
 
-# set locale
+# Tetapan SSH (locale env)
 sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
 
 
@@ -252,6 +252,7 @@ sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dr
 wget https://raw.githubusercontent.com/Budaxcomel/v4/main/ssh/bbr.sh && chmod +x bbr.sh && ./bbr.sh
 
 # blockir torrent
+modprobe xt_string >/dev/null 2>&1 || true
 iptables -A FORWARD -m string --string "get_peers" --algo bm -j DROP
 iptables -A FORWARD -m string --string "announce_peer" --algo bm -j DROP
 iptables -A FORWARD -m string --string "find_node" --algo bm -j DROP
@@ -264,7 +265,7 @@ iptables -A FORWARD -m string --algo bm --string "torrent" -j DROP
 iptables -A FORWARD -m string --algo bm --string "announce" -j DROP
 iptables -A FORWARD -m string --algo bm --string "info_hash" -j DROP
 iptables-save > /etc/iptables.up.rules
-iptables-restore -t < /etc/iptables.up.rules
+iptables-restore < /etc/iptables.up.rules
 netfilter-persistent save
 netfilter-persistent reload
 
