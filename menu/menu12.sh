@@ -14,7 +14,7 @@
  clear
 
 BURIQ () {
-    curl -sS https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini > /root/tmp
+    curl -sS https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini | tr -d '\r' | tr '\n' '  ' | awk '{for(i=1;i<=NF;i++){if($i=="###"){n=$(i+1);e=$(i+2);a=$(i+3);st=$(i+4); if(n!="nama"){print "###",n,e,a,st}}}' > /root/tmp
     data=( `cat /root/tmp | grep -E "^### " | awk '{print $2}'` )
     for user in "${data[@]}"
     do
@@ -32,7 +32,7 @@ BURIQ () {
 }
 
 MYIP=$(curl -sS ipv4.icanhazip.com)
-Name=$(curl -sS https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini | grep $MYIP | awk '{print $2}')
+Name=$(curl -sS https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini | tr '\r\n' '  ' | awk -v ip="$MYIP" '{for(i=1;i<=NF;i++){if($i=="###"){n=$(i+1);e=$(i+2);a=$(i+3);st=$(i+4); if(a==ip){print n; exit}}}}')
 echo $Name > /usr/local/etc/.$Name.ini
 CekOne=$(cat /usr/local/etc/.$Name.ini)
 
@@ -49,7 +49,7 @@ fi
 
 PERMISSION () {
     MYIP=$(curl -sS ipv4.icanhazip.com)
-    IZIN=$(curl -sS https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini | awk '{print $4}' | grep $MYIP)
+    IZIN=$(curl -sS https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini | tr '\r\n' '  ' | awk -v ip="$MYIP" '{for(i=1;i<=NF;i++){if($i=="###"){a=$(i+3); if(a==ip){print a; exit}}}}')
     if [ "$MYIP" = "$IZIN" ]; then
     Bloman
     else
@@ -67,7 +67,7 @@ PERMISSION
 if [ "$res" = "Expired" ]; then
 Exp="\e[36mExpired\033[0m"
 else
-Exp=$(curl -sS https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini | grep $MYIP | awk '{print $3}')
+Exp=$(curl -sS https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini | tr '\r\n' '  ' | awk -v ip="$MYIP" '{for(i=1;i<=NF;i++){if($i=="###"){n=$(i+1);e=$(i+2);a=$(i+3); if(a==ip){print e; exit}}}}')
 fi
 
 # // Exporting Language to UTF-8
