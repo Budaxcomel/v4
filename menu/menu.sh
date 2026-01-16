@@ -1,28 +1,76 @@
 #!/bin/bash
-ipsaya=$(curl -sS ipinfo.io/ip)
-data_server=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
-date_list=$(date +"%Y-%m-%d" -d "$data_server")
+ipsaya=$(curl -fsS ipinfo.io/ip 2>/dev/null || curl -fsS ifconfig.me 2>/dev/null || curl -fsS api.ipify.org 2>/dev/null || echo "")
+NET_IF=$(ip -o -4 route show to default | awk '{print $5}' | head -n1)
+[[ -z "$NET_IF" ]] && NET_IF="eth0"
 data_ip="https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini"
-checking_sc() {
-    useexp=$(curl -sS $data_ip | grep $ipsaya | awk '{print $3}')
-    if [[ $date_list < $useexp ]]; then
-        echo -ne
+izin_ip="https://raw.githubusercontent.com/Budaxcomel/izinvps/ipuk/ip"
+
+get_server_date() {
+    local d
+    d=$(curl -fsI https://google.com/ 2>/dev/null | grep -i '^date:' | sed -e 's/Date: //I' | tr -d '
+' || true)
+    if [[ -n "$d" ]]; then
+        date +"%Y-%m-%d" -d "$d" 2>/dev/null || date +"%Y-%m-%d"
     else
-        echo -e "\033[1;36m┌─────────────────────────────────────────────────┐\033[0m"
-        echo -e "\033[1;36m \033[0m ${COLBG1}          ${WH}• AUTOSCRIPT PREMIUM •               \033[0m \033[1;36m $NC"
-        echo -e "\033[1;36m└─────────────────────────────────────────────────┘\033[0m"
-        echo -e "\033[1;36m┌─────────────────────────────────────────────────┐\033[0m"
-        echo -e "            ${RED}PERMISSION DENIED !\033[0m"
-        echo -e "   \033[0;33mYour VPS\033[0m $ipsaya \033[0;33mHas been Banned\033[0m"
-        echo -e "     \033[0;33mBuy access permissions for scripts\033[0m"
-        echo -e "             \033[0;33mContact Your Admin \033[0m"
-        echo -e "     \033[0;36mTelegram\033[0m: https://t.me/ownerimmanvpn"
-        echo -e "\033[1;36m└─────────────────────────────────────────────────┘\033[0m"
-        exit
+        date +"%Y-%m-%d"
     fi
 }
+
+get_perm_record() {
+    # Output: "NAME EXPIRY STATUS" (STATUS mungkin kosong)
+    local ip="$1"
+    local src="$2"
+    curl -fsS "$src" 2>/dev/null | tr $'\r\n' '  ' | awk -v ip="$ip" '{
+        for (i=1; i<=NF; i++) {
+            if ($i == "###") {
+                name=$(i+1); expiry=$(i+2); ipaddr=$(i+3); st=$(i+4);
+                if (ipaddr == ip) { print name, expiry, st; exit }
+            }
+        }
+    }'
+}
+
+checking_sc() {
+    local today useexp name
+    today=$(get_server_date)
+
+    local rec
+    rec=$(get_perm_record "$ipsaya" "$data_ip")
+    if [[ -z "$rec" ]]; then
+        rec=$(get_perm_record "$ipsaya" "$izin_ip")
+    fi
+
+    name=$(echo "$rec" | awk '{print $1}')
+    useexp=$(echo "$rec" | awk '{print $2}')
+
+    if [[ -z "$useexp" ]]; then
+        echo -e "[1;36m┌─────────────────────────────────────────────────┐[0m"
+        echo -e "            ${RED}PERMISSION DENIED ![0m"
+        echo -e "   [0;33mIP VPS[0m $ipsaya [0;33mtiada dalam senarai akses[0m"
+        echo -e "     [0;33mSila hubungi admin untuk aktifkan akses.[0m"
+        echo -e "     [0;36mTelegram[0m: https://t.me/ownerimmanvpn"
+        echo -e "[1;36m└─────────────────────────────────────────────────┘[0m"
+        exit
+    fi
+
+    local today_s exp_s
+    today_s=$(date -d "$today" +%s 2>/dev/null || echo 0)
+    exp_s=$(date -d "$useexp" +%s 2>/dev/null || echo 0)
+
+    if [[ "$today_s" -ge "$exp_s" ]]; then
+        echo -e "[1;36m┌─────────────────────────────────────────────────┐[0m"
+        echo -e "            ${RED}PERMISSION DENIED ![0m"
+        echo -e "   [0;33mAkses tamat[0m: $useexp"
+        echo -e "     [0;33mSila hubungi admin untuk sambung tempoh.[0m"
+        echo -e "     [0;36mTelegram[0m: https://t.me/ownerimmanvpn"
+        echo -e "[1;36m└─────────────────────────────────────────────────┘[0m"
+        exit
+    fi
+
+    Name="$name"
+}
+
 checking_sc
-Name=$(curl -sS https://raw.githubusercontent.com/Budaxcomel/permission/main/ipmini | grep $ipsaya | awk '{print $2}')
 # =========================================
 vlx=$(grep -c -E "^#& " "/etc/xray/config.json")
 let vla=$vlx/2
@@ -38,7 +86,7 @@ let ssa=$ssx/2
 if [[ -e /usr/bin/bot ]]; then
 echo -ne
 else
-wget -O /usr/bin/bot https://raw.githubusercontent.com/Budaxcomel/botSC/main/bot.sh && chmod +x /usr/bin/bot
+wget -O /usr/bin/bot https://raw.githubusercontent.com/Budaxcomel/v4/main/bot.sh && chmod +x /usr/bin/bot
 fi
 UDPX="https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1S3IE25v_fyUfCLslnujFBSBMNunDHDk2' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1S3IE25v_fyUfCLslnujFBSBMNunDHDk2"
 # // Exporting Language to UTF-8
@@ -63,17 +111,17 @@ ICyan='\033[0;96m'        # Cyan
 IWhite='\033[0;97m'       # White
 NC='\e[0m'
 #Download/Upload today
-dtoday="$(vnstat -i eth0 | grep "today" | awk '{print $2" "substr ($3, 1, 1)}')"
-utoday="$(vnstat -i eth0 | grep "today" | awk '{print $5" "substr ($6, 1, 1)}')"
-ttoday="$(vnstat -i eth0 | grep "today" | awk '{print $8" "substr ($9, 1, 1)}')"
+dtoday="$(vnstat -i "$NET_IF" | grep "today" | awk '{print $2" "substr ($3, 1, 1)}')"
+utoday="$(vnstat -i "$NET_IF" | grep "today" | awk '{print $5" "substr ($6, 1, 1)}')"
+ttoday="$(vnstat -i "$NET_IF" | grep "today" | awk '{print $8" "substr ($9, 1, 1)}')"
 #Download/Upload yesterday
-dyest="$(vnstat -i eth0 | grep "yesterday" | awk '{print $2" "substr ($3, 1, 1)}')"
-uyest="$(vnstat -i eth0 | grep "yesterday" | awk '{print $5" "substr ($6, 1, 1)}')"
-tyest="$(vnstat -i eth0 | grep "yesterday" | awk '{print $8" "substr ($9, 1, 1)}')"
+dyest="$(vnstat -i "$NET_IF" | grep "yesterday" | awk '{print $2" "substr ($3, 1, 1)}')"
+uyest="$(vnstat -i "$NET_IF" | grep "yesterday" | awk '{print $5" "substr ($6, 1, 1)}')"
+tyest="$(vnstat -i "$NET_IF" | grep "yesterday" | awk '{print $8" "substr ($9, 1, 1)}')"
 #Download/Upload current month
-dmon="$(vnstat -i eth0 -m | grep "`date +"%b '%y"`" | awk '{print $3" "substr ($4, 1, 1)}')"
-umon="$(vnstat -i eth0 -m | grep "`date +"%b '%y"`" | awk '{print $6" "substr ($7, 1, 1)}')"
-tmon="$(vnstat -i eth0 -m | grep "`date +"%b '%y"`" | awk '{print $9" "substr ($10, 1, 1)}')"
+dmon="$(vnstat -i "$NET_IF" -m | grep "`date +"%b '%y"`" | awk '{print $3" "substr ($4, 1, 1)}')"
+umon="$(vnstat -i "$NET_IF" -m | grep "`date +"%b '%y"`" | awk '{print $6" "substr ($7, 1, 1)}')"
+tmon="$(vnstat -i "$NET_IF" -m | grep "`date +"%b '%y"`" | awk '{print $9" "substr ($10, 1, 1)}')"
 clear
 
 # // Exporting Language to UTF-8
