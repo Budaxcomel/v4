@@ -1,4 +1,9 @@
 #!/bin/bash
+# Warna
+green='\e[1;32m'
+red='\e[1;31m'
+NC='\e[0m'
+
 echo -e "
 "
 date
@@ -6,30 +11,34 @@ echo ""
 domain=$(cat /root/domain)
 sleep 1
 mkdir -p /etc/xray 
-echo -e "[ ${green}INFO${NC} ] Checking... "
-apt install iptables iptables-persistent -y
+echo -e "[ ${green}INFO${NC} ] Semakan persediaan... "
+apt-get update -y
+apt-get install -y iptables iptables-persistent chrony ntpdate curl socat
 sleep 1
-echo -e "[ ${green}INFO$NC ] Setting ntpdate"
-ntpdate pool.ntp.org 
-timedatectl set-ntp true
+echo -e "[ ${green}INFO${NC} ] Menyelaraskan masa (ntpdate)"
+command -v ntpdate >/dev/null 2>&1 || apt-get install -y ntpdate >/dev/null 2>&1
+ntpdate pool.ntp.org || true 
+timedatectl set-ntp true >/dev/null 2>&1 || true
 sleep 1
-echo -e "[ ${green}INFO$NC ] Enable chronyd"
-systemctl enable chronyd
-systemctl restart chronyd
+echo -e "[ ${green}INFO${NC} ] Mengaktifkan chrony"
+systemctl enable chrony >/dev/null 2>&1 || true
+systemctl restart chrony >/dev/null 2>&1 || true
 sleep 1
-echo -e "[ ${green}INFO$NC ] Enable chrony"
-systemctl enable chrony
-systemctl restart chrony
+echo -e "[ ${green}INFO${NC} ] Mengaktifkan chrony"
+systemctl enable chrony >/dev/null 2>&1 || true
+systemctl restart chrony >/dev/null 2>&1 || true
 timedatectl set-timezone Asia/Kuala_Lumpur
 sleep 1
-echo -e "[ ${green}INFO$NC ] Setting chrony tracking"
-chronyc sourcestats -v
-chronyc tracking -v
-echo -e "[ ${green}INFO$NC ] Setting dll"
-apt clean all && apt update
+echo -e "[ ${green}INFO${NC} ] Semakan chrony (tracking)"
+chronyc sourcestats -v || true
+chronyc tracking -v || true
+echo -e "[ ${green}INFO${NC} ] Memasang keperluan tambahan"
+apt-get clean
+apt-get update -y
 apt install curl socat xz-utils wget apt-transport-https gnupg gnupg2 gnupg1 dnsutils lsb-release -y 
 apt install socat cron bash-completion ntpdate -y
-ntpdate pool.ntp.org
+command -v ntpdate >/dev/null 2>&1 || apt-get install -y ntpdate >/dev/null 2>&1
+ntpdate pool.ntp.org || true
 apt -y install chrony
 apt install zip -y
 apt install curl pwgen openssl netcat cron -y
@@ -37,20 +46,20 @@ apt install curl pwgen openssl netcat cron -y
 
 # install xray
 sleep 1
-echo -e "[ ${green}INFO$NC ] Downloading & Installing xray core"
+echo -e "[ ${green}INFO${NC} ] Memuat turun & memasang Xray Core"
 domainSock_dir="/run/xray";! [ -d $domainSock_dir ] && mkdir  $domainSock_dir
-chown www-data.www-data $domainSock_dir
+chown www-data:www-data $domainSock_dir
 # Make Folder XRay
 mkdir -p /var/log/xray
 mkdir -p /etc/xray
-chown www-data.www-data /var/log/xray
+chown www-data:www-data /var/log/xray
 chmod +x /var/log/xray
 touch /var/log/xray/access.log
 touch /var/log/xray/error.log
 touch /var/log/xray/access2.log
 touch /var/log/xray/error2.log
 # / / Ambil Xray Core Version Terbaru
-bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install -u www-data --version 1.5.6
+bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install -u www-data
 
 
 
