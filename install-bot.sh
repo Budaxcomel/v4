@@ -1,20 +1,22 @@
 #!/bin/bash
-red='\e[1;31m'
-green='\e[0;32m'
-yell='\e[1;33m'
-NC='\e[0m'
-echo "OTW install bot Vps"
-echo "waiting......."
-echo "Progress..."
-sleep 3
-#install bot TELEGRAM
-cd /usr/bin 
-wget -O bot "https://raw.githubusercontent.com/Budaxcomel/botSC/main/bot.sh" && chmod +x /usr/bin/bot
+# install-bot.sh - Pemasangan bot Telegram (adminbot) melalui bot.sh
+set -euo pipefail
 
-cd
+if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
+  echo "Sila jalankan sebagai root."
+  exit 1
+fi
 
-sleep 3
-clear
-read -n 1 -s -r -p "Press any key to back on menu"
+# Pastikan /usr/bin/bot wujud (bot panel)
+if [[ ! -x /usr/bin/bot ]]; then
+  wget -q -O /usr/bin/bot https://raw.githubusercontent.com/Budaxcomel/v4/main/bot.sh
+  chmod +x /usr/bin/bot
+fi
 
-menu
+/usr/bin/bot --install
+
+# Kembali ke menu jika wujud
+if command -v menu >/dev/null 2>&1; then
+  read -n 1 -s -r -p "Tekan apa-apa kekunci untuk kembali ke menu..."
+  menu
+fi
