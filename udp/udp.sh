@@ -1,5 +1,5 @@
 #!/bin/bash
-#Script UdpCustom 2023
+# Skrip UDP-Custom 2023
 #Script By IMMANVPN
 
 cd
@@ -8,17 +8,17 @@ mkdir -p /root/udp
 # install udp-custom
 echo ""
 sleep 4
-echo " install UDP-CUSTOM........" | lolcat
+echo " Pasang UDP-CUSTOM........" | lolcat
 sleep 4
 clear
-echo "OTW BARENG IMMANVPN........" | lolcat
+echo "Sedang dipasang oleh IMMANVPN........" | lolcat
 clear
 wget -q --show-progress --load-cookies /tmp/cookies.txt "https://gitlab.com/Exe302/Tunnel/-/raw/main/udp-custom-linux-amd64" -O /root/udp/udp-custom && rm -rf /tmp/cookies.txt
 chmod +x /root/udp/udp-custom
 clear
 # install Config Default Udp
 echo ""
-echo "Mempersiapkan progres udp......." | lolcat
+echo "Menyediakan proses UDP......." | lolcat
 sleep 4
 clear
 wget -q --show-progress --load-cookies /tmp/cookies.txt "https://gitlab.com/Exe302/Tunnel/-/raw/main/config.json" -O /root/udp/config.json && rm -rf /tmp/cookies.txt
@@ -65,6 +65,6 @@ echo enable service udp-custom
 systemctl enable udp-custom &>/dev/null
 
 echo ""
-sleep 0,5
+sleep 0.5
 clear
 
