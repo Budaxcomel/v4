@@ -1,17 +1,35 @@
+#!/bin/bash
+
 domain=$(cat /etc/xray/domain)
 TIMES="10"
-CHATID=$(cat /etc/id)
-KEY=$(cat /etc/token)
-URL="https://api.telegram.org/bot$KEY/sendMessage"
 
-tls="$(cat ~/log-install.txt | grep -w "Vless TLS" | cut -d: -f2|sed 's/ //g')"
-none="$(cat ~/log-install.txt | grep -w "Vless None TLS" | cut -d: -f2|sed 's/ //g')"
-user=trial`</dev/urandom tr -dc X-Z0-9 | head -c4`
+CHATID=""
+KEY=""
+URL=""
+TELEGRAM_OK=0
+
+# Telegram adalah pilihan (optional). Kalau /etc/id atau /etc/token tiada,
+# skrip tetap berjalan tanpa ralat dan tanpa hantar notifikasi.
+if [[ -s /etc/id && -s /etc/token ]]; then
+  CHATID="$(cat /etc/id)"
+  KEY="$(cat /etc/token)"
+  URL="https://api.telegram.org/bot${KEY}/sendMessage"
+  TELEGRAM_OK=1
+fi
+
+# Ambil port dari /root/log-install.txt (label ikut output log semasa).
+tls="$(grep -w "VLESS TLS" /root/log-install.txt 2>/dev/null | cut -d: -f2 | sed 's/ //g')"
+none="$(grep -w "VLESS Tanpa TLS" /root/log-install.txt 2>/dev/null | cut -d: -f2 | sed 's/ //g')"
+
+# fallback kalau parsing gagal
+[[ -z "$tls" ]] && tls=443
+[[ -z "$none" ]] && none=80
+user=trial$(</dev/urandom tr -dc X-Z0-9 | head -c4)
 uuid=$(cat /proc/sys/kernel/random/uuid)
-masaaktif=1
-exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
-uuid=$(cat /proc/sys/kernel/random/uuid)
-read -p "Expired (days): " masaaktif
+
+read -p "Tempoh tamat (hari): " masaaktif
+[[ -z "$masaaktif" ]] && masaaktif=1
+exp=$(date -d "$masaaktif days" +"%Y-%m-%d")
 sed -i '/#vless$/a\#& '"$user $exp"'\
 },{"id": "'""$uuid""'","email": "'""$user""'"' /etc/xray/config.json
 sed -i '/#vlessgrpc$/a\#& '"$user $exp"'\
@@ -27,20 +45,20 @@ vless3="$(echo $vlesslink3 | base64 -w 0)"
 
 TEXT="
 <code>◇━━━━━━━━━━━━━━━━━◇</code>
-<code>  Premium Vless Account</code>
+<code>  Akaun Vless (Trial)</code>
 <code>◇━━━━━━━━━━━━━━━━━◇</code>
 <code>Remarks      : </code> <code>${user}</code>
 <code>Domain       : </code> <code>${domain}</code>
-<code>Port TLS     : 443</code>
-<code>Port NTLS    : 80, 8080</code>
-<code>Port GRPC    : 443</code>
+<code>Port TLS     : </code> <code>${tls}</code>
+<code>Port NTLS    : </code> <code>${none}</code>
+<code>Port GRPC    : </code> <code>${tls}</code>
 <code>User ID      : </code> <code>${uuid}</code>
 <code>AlterId      : 0</code>
 <code>Security     : auto</code>
 <code>Network      : WS or gRPC</code>
 <code>Path vless   : </code> <code>/vless</code>
 <code>ServiceName  : </code> <code>/vless-grpc</code>
-<code>Expired On : </code> <code>$timer Minutes</code>
+<code>Tamat pada : </code> <code>${exp}</code>
 <code>◇━━━━━━━━━━━━━━━━━◇</code>
 <code>Link TLS     :</code> 
 <code>${vless1}</code>
@@ -53,7 +71,9 @@ TEXT="
 <code>◇━━━━━━━━━━━━━━━━━◇</code>
 "
 
-curl -s --max-time $TIMES -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+if [[ "$TELEGRAM_OK" = "1" ]]; then
+  curl -s --max-time "$TIMES" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" "$URL" >/dev/null
+fi
 
 echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 echo -e "\E[40;1;37m        Trial Xray/Vless        \E[0m"
@@ -78,6 +98,6 @@ echo -e "Expired On     : $exp"
 echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 echo ""
 
-read -n 1 -s -r -p "Press any key to back on menu"
+read -n 1 -s -r -p "Tekan apa-apa kekunci untuk kembali ke menu"
 
 menu
